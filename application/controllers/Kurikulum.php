@@ -769,8 +769,6 @@ public function updatepassword() {
 			$data['tabel_mapel'] = $this->mod_mapel->getgroupbyjenjang2();
 			$this->load->model('penjadwalan/mod_kelasreguler');
 			$data['tabel_kelasreguler'] = $this->mod_kelasreguler->getgroupby();
-			
-			//$data['edit_mapel'] = $this->mod_mapel->selectbynamajenjang(str_replace("_", " ", $nama_mapel), $jenjang);
 			$data['edit_mapel'] = $this->mod_mapel->selectbyidnamajenjang(str_replace("_", " ", $id_namamapel), $jenjang);
 
 			$this->template->load('kurikulum/dashboard','kurikulum/penjadwalan/kurikulum/mapel', $data);
@@ -2025,9 +2023,6 @@ public function updatepassword() {
 
 			$this->template->load('kurikulum/dashboard','kurikulum/penjadwalan/kurikulum/ekstrakurikuler', $data);
 		}
-		
-
-		// redirect('penjadwalan/kurikulum/ekstrakurikuler');
 	}
 
 	public function hapusjadwalekskul() {
@@ -2036,6 +2031,50 @@ public function updatepassword() {
 		$this->load->model('penjadwalan/mod_jadwalekskul');
 		$this->mod_jadwalekskul->delete($this->uri->segment(3));
 		$this->session->set_flashdata("warning",'<script> swal( "Berhasil" ,  "Data terhapus !" ,  "success" )</script>');
+		redirect('kurikulum/ekstrakurikuler');
+	}
+
+	public function tambah_jenis_kls_tambahan()
+	{
+		$data['nama'] = $this->session->Nama;
+		$data['foto'] = $this->session->foto; 
+		$this->load->model('penjadwalan/mod_jenisklstambahan');
+
+		$data = array(
+			'jenis_kls_tambahan' => $this->input->post('jenis_kls_tambahan')
+		);
+		
+		$this->mod_jenisklstambahan->insert($data);	
+		
+		$this->session->set_flashdata("warning",'<script> swal( "Berhasil" ,  "Data tersimpan !" ,  "success" )</script>');
+		redirect('kurikulum/ekstrakurikuler');
+	}
+
+	public function edit_jenis_kls_tambahan()
+	{
+		$data['nama'] = $this->session->Nama;
+		$data['foto'] = $this->session->foto; 
+		$this->load->model('penjadwalan/mod_jenisklstambahan');
+
+		$data = array(
+			'jenis_kls_tambahan' => $this->input->post('jenis_kls_tambahan')
+		);
+		$id = $this->input->post('id_kls_tambahan');
+		
+		$this->mod_jenisklstambahan->update($data, $id);	
+		
+		$this->session->set_flashdata("warning",'<script> swal( "Berhasil" ,  "Data tersimpan !" ,  "success" )</script>');
+		redirect('kurikulum/ekstrakurikuler');
+	}
+
+	public function hapus_jenis_kls_tambahan($id = 0)
+	{
+		$data['nama'] = $this->session->Nama;
+		$data['foto'] = $this->session->foto; 
+		$this->load->model('penjadwalan/mod_jenisklstambahan');
+		$this->mod_jenisklstambahan->delete($id);	
+		
+		$this->session->set_flashdata("warning",'<script> swal( "Berhasil" ,  "Data tersimpan !" ,  "success" )</script>');
 		redirect('kurikulum/ekstrakurikuler');
 	}
 
