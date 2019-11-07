@@ -18,22 +18,22 @@
       <div class="col-md-12">
         <div class="nav-tabs-custom">
           <ul class="nav nav-tabs">
-            <li class="active"><a href="#pengaturan" data-toggle="tab">Pengaturan</a></li>
-            <li><a href="#dataekskul" data-toggle="tab"><?php if (@$edit_jadwalekskul) { echo "Edit"; } else { echo "Tambah"; } ?> Jadwal Ekskul</a></li>
-            <li><a href="#dataekstrakurikuler" data-toggle="tab">Data Ekskul </a></li>
+            <li class="<?php echo $this->session->flashdata('position_tab') == null ? 'active' : '' ?>"><a href="#pengaturan" data-toggle="tab">Pengaturan</a></li>
+            <li class="<?php echo $this->session->flashdata('position_tab') == 2 ? 'active' : '' ?>"><a href="#dataekskul" data-toggle="tab"><?php if (@$edit_jadwalekskul) { echo "Edit"; } else { echo "Tambah"; } ?> Jadwal Ekskul</a></li>
+            <li class="<?php echo $this->session->flashdata('position_tab') == 3 ? 'active' : '' ?>"><a href="#dataekstrakurikuler" data-toggle="tab">Data Ekskul </a></li>
          </ul>
 
 
          <div class="tab-content">
-          <div class="active tab-pane" id="pengaturan">
+          <div class="tab-pane <?php echo $this->session->flashdata('position_tab') == null ? 'active' : '' ?>" id="pengaturan">
             <div class="box-body">
               <div class="box-add-eskul">
                 <button class="btn btn-success" id="tambah_eskul_trigger">Tambah Ekstrakurikuler</button>
               </div>
-              <div class="box-header" style="background-color: #5c8a8a;">
+              <div class="box-header mg-bottom-15" style="background-color: #5c8a8a;">
                 <h3 class="box-title" style="color:white">Daftar Ekstrakurikuler </h3>
               </div>
-              <table class="table table-bordered table-striped">
+              <table id="example2" class="table table-bordered table-striped">
                 <thead>
                   <tr>
                     <th class="fit">No.</th>
@@ -64,7 +64,7 @@
             <!-- /.box-body -->
           </div>
 
-          <div class="tab-pane" id="dataekskul">
+          <div class="tab-pane <?php echo $this->session->flashdata('position_tab') == 2 ? 'active' : '' ?>" id="dataekskul">
 
             <div>
               <!-- <div class="box-header" style="background-color:     #5c8a8a">
@@ -157,9 +157,9 @@
 
           <!-- /.tab-pane -->
           <div> <?php echo $this->session->flashdata('warning') ?></div>
-          <div class="tab-pane" id="dataekstrakurikuler">
+          <div class="tab-pane <?php echo $this->session->flashdata('position_tab') == 3 ? 'active' : '' ?>" id="dataekstrakurikuler">
             <div class="box-body">
-              <div class="box-header" style="background-color:     #5c8a8a">
+              <div class="box-header mg-bottom-15" style="background-color:     #5c8a8a">
                 <h3 class="box-title" style="color:white">Data Jadwal Ekstrakurikuler </h3>
               </div>
               <table id="example1" class="table table-bordered table-striped">
@@ -190,7 +190,16 @@
                       <td><?php echo $row_jadwalekskul->tempat; ?></td>
                       <td><?php echo $row_jadwalekskul->nama_pembimbing; ?></td>
                       <td> 
-                        <a class="btn btn-block btn-primary button-action btnedit" href="<?php echo site_url('kurikulum/ekstrakurikuler/'.$row_jadwalekskul->id_jadwal_ekskul); ?>" > Edit </a>
+                        <button
+                          class="btn btn-block btn-primary button-action btnedit edit_jadwal_eskul_trigger"
+                          id_jadwal_eskul="<?php echo $row_jadwalekskul->id_jadwal_ekskul ?>"
+                          hari="<?php echo $row_jadwalekskul->hari ?>"
+                          jam_mulai="<?php echo $row_jadwalekskul->jam_mulai ?>"
+                          jam_selesai="<?php echo $row_jadwalekskul->jam_selesai ?>"
+                          jenis_eskul="<?php echo preg_replace('/\s+/', '', $row_jadwalekskul->jenis_kls_tambahan); ?>"
+                          tempat="<?php echo $row_jadwalekskul->tempat ?>"
+                          pembimbing="<?php echo preg_replace('/\s+/', '', $row_jadwalekskul->nama_pembimbing); ?>"
+                        >Edit</button>
                         <a onclick="return confirm('Apakah Anda yakin?')" class="btn btn-danger btn-primary button-action btnhapus" href="<?php echo site_url('kurikulum/hapusjadwalekskul/'.$row_jadwalekskul->id_jadwal_ekskul); ?>" > Hapus </a>
                       </td>               
                     </tr>
@@ -269,6 +278,97 @@
   </div>
 </div>
 
+<div id="modal_edit_jadwal_eskul" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="post" class="form-horizontal" action="<?php echo site_url('kurikulum/simpanjadwalekskul'); ?>">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Edit Jadwal Ekstrakulikuler</h4>
+        </div>
+        <div class="modal-body">
+          
+          <input type="hidden" name="id_jadwal_ekskul" value="" id="modal_id_jadwal_eskul">
+          <div class="form-group formgrup jarakform">
+            <label class="col-sm-2 control-label">Hari</label>
+            <div class="col-sm-8">
+              <select required="required" class="form-control" name="hari" value="<?php echo $row_jadwalekskul->hari; ?>">
+                <option value="">Pilih Hari</option>
+                <option value="Senin" id="Senin"> Senin </option>
+                <option value="Selasa" id="Selasa"> Selasa </option>
+                <option value="Rabu" id="Rabu"> Rabu </option>
+                <option value="Kamis" id="Kamis"> Kamis </option>
+                <option value="Jumat" id="Jumat"> Jumat</option>
+                <option value="Sabtu" id="Sabtu"> Sabtu </option>
+                <option value="Minggu" id="Minggu"> Minggu </option>    
+              </select>
+            </div>
+          </div>
+
+          <div class="bigbox-mapel"> 
+            <div class="box-mapel">
+              <div class="form-group formgrup jarakform">
+                <label for="modal_jam_mulai" class="col-sm-2 control-label">Jam Mulai</label>
+                <div class="col-sm-8">
+                  <input type="time" class="form-control" id="modal_jam_mulai" name="jam_mulai" placeholder="Waktu" value="<?php echo @$edit_jadwalekskul->jam_mulai; ?>">
+                </div>
+              </div>
+              <div class="form-group formgrup jarakform">
+                <label for="modal_jam_selesai" class="col-sm-2 control-label">Jam Selesai</label>
+                <div class="col-sm-8">
+                  <input type="time" class="form-control" id="modal_jam_selesai" name="jam_selesai" placeholder="Waktu" value="<?php echo @$edit_jadwalekskul->jam_selesai; ?>">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group formgrup jarakform">
+            <label class="col-sm-2 control-label">Jenis Ekstrakurikuler</label>
+            <div class="col-sm-8">
+              <select class="form-control" name="id_jenis_kls_tambahan" id="kelas1" onchange="fetch_select_ekskul(this.value, 'ekskul1');">
+                <option value="">Pilih Ekskul</option>
+                <?php
+                foreach ($tabel_jenisklstambahan as $row_jenisklstambahan) { ?>
+                  <option value="<?php echo $row_jenisklstambahan->id_jenis_kls_tambahan; ?>" id="modal_<?php echo preg_replace('/\s+/', '', $row_jenisklstambahan->jenis_kls_tambahan); ?>"><?php echo $row_jenisklstambahan->jenis_kls_tambahan; ?></option><?php
+                } ?>
+              </select>
+            </div>
+          </div>
+
+          <div class="bigbox-mapel"> 
+            <div class="box-mapel">
+              <div class="form-group formgrup jarakform">
+                <label for="modal_tempat" class="col-sm-2 control-label">Tempat</label>
+                <div class="col-sm-8">
+                  <input type="text" class="form-control" id="modal_tempat" name="tempat" placeholder="tempat" value="<?php echo @$edit_jadwalekskul->tempat; ?>">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group formgrup jarakform">
+            <label class="col-sm-2 control-label">Pembimbing</label>
+            <div class="col-sm-8">
+              <select class="form-control" name="id_pembimbing">
+                <option value="">Pilih Pembimbing</option>
+                <?php
+                foreach ($tabel_pembimbing as $row_pembimbing) { ?>
+                  <option value="<?php echo $row_pembimbing->id_pembimbing; ?>" id="modal_<?php echo preg_replace('/\s+/', '', $row_pembimbing->nama_pembimbing); ?>"><?php echo $row_pembimbing->nama_pembimbing; ?></option> <?php
+                }?>
+              </select>
+            </div>
+          </div>
+
+
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 <script>
   $(document).ready(function() {
     $("#tambah_eskul_trigger").click(function() {
@@ -282,6 +382,25 @@
       $("#id_kls_tambahan").val(id)
       $("#jenis_kls_tambahan").val(name)
       $("#modal_edit_eskul").modal('show')
+    })
+
+    $(".edit_jadwal_eskul_trigger").click(function() {
+      var id_jadwal_eskul = $(this).attr('id_jadwal_eskul')
+      var hari = $(this).attr('hari')
+      var jam_mulai = $(this).attr('jam_mulai')
+      var jam_selesai = $(this).attr('jam_selesai')
+      var jenis_eskul = $(this).attr('jenis_eskul')
+      var tempat = $(this).attr('tempat')
+      var pembimbing = $(this).attr('pembimbing')
+
+      $("#modal_id_jadwal_eskul").val(id_jadwal_eskul)
+      $(`#${hari}`).attr('selected', true)
+      $("#modal_jam_mulai").val(jam_mulai)
+      $("#modal_jam_selesai").val(jam_selesai)
+      $("#modal_tempat").val(tempat)
+      $(`#modal_${jenis_eskul}`).attr('selected', true)
+      $(`#modal_${pembimbing}`).attr('selected', true)  
+      $("#modal_edit_jadwal_eskul").modal('show')
     })
   })
 </script>

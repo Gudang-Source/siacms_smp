@@ -2031,6 +2031,7 @@ public function updatepassword() {
 		$this->load->model('penjadwalan/mod_jadwalekskul');
 		$this->mod_jadwalekskul->delete($this->uri->segment(3));
 		$this->session->set_flashdata("warning",'<script> swal( "Berhasil" ,  "Data terhapus !" ,  "success" )</script>');
+		$this->session->set_flashdata("position_tab", 3);
 		redirect('kurikulum/ekstrakurikuler');
 	}
 
@@ -2107,11 +2108,13 @@ public function updatepassword() {
 				//if ($this->mod_mapel->cekdatamapel($this->input->post('nama_mapel'), $row_kelasreguler->id_kelas_reguler) == 0) {
 					//echo "3";
 			$this->mod_jadwalekskul->insert($data);	
+			$this->session->set_flashdata("position_tab", 2);
 				//} 
 
 		} else {
 				//echo "4";
 			$this->mod_jadwalekskul->update($data, $this->input->post('id_jadwal_ekskul'));
+			$this->session->set_flashdata("position_tab", 3);
 		}	
 		
 		$this->session->set_flashdata("warning",'<script> swal( "Berhasil" ,  "Data tersimpan !" ,  "success" )</script>');

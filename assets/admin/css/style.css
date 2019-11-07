@@ -17,6 +17,10 @@ h3.center {
     width: 25%;
 }
 
+.mg-bottom-15 {
+	margin-bottom: 15px;
+}
+
 .image-left img {
 	width: 60%;
 }
