@@ -65,83 +65,92 @@
           </div>
 
           <div class="tab-pane" id="dataekskul">
-            <form method="post" action="<?php echo site_url('kurikulum/simpanjadwalekskul'); ?>">
-              <input type="hidden" name="id_jadwal_ekskul" value="<?php echo @$edit_jadwalekskul->id_jadwal_ekskul; ?>">
-              <table id="example1" class="table table-bordered table-striped tabelmapel">
 
-                <tbody>
+            <div>
+              <!-- <div class="box-header" style="background-color:     #5c8a8a">
+                <h3 class="box-title" style="color:white">Tambah Manual</h3>
+              </div> -->
+              <form style="display:block;" class="form-horizontal formmapel" method="post" action="<?php echo site_url('kurikulum/simpanjadwalekskul'); ?>">
+                <input type="hidden" name="id_jadwal_ekskul" value="<?php echo @$edit_jadwalekskul->id_jadwal_ekskul; ?>">
+                
+                <div class="form-group formgrup jarakform">
+                  <label class="col-sm-2 control-label">Hari</label>
+                  <div class="col-sm-4">
+                    <select required="required" class="form-control" name="hari" value="<?php echo $row_jadwalekskul->hari; ?>" style="width: 120px;">
+                      <option value="">Pilih Hari</option>
+                      <option value="Senin" <?php if (isset($row_jadwalekskul->hari) && $row_jadwalekskul->hari=="Senin") echo "selected";?>> Senin </option>
+                      <option value="Selasa" <?php if (isset($row_jadwalekskul->hari) && $row_jadwalekskul->hari=="Selasa") echo "selected";?>> Selasa </option>
+                      <option value="Rabu" <?php if (isset($row_jadwalekskul->hari) && $row_jadwalekskul->hari=="Rabu") echo "selected";?>> Rabu </option>
+                      <option value="Kamis" <?php if (isset($row_jadwalekskul->hari) && $row_jadwalekskul->hari=="Kamis") echo "selected";?>> Kamis </option>
+                      <option value="Jumat" <?php if (isset($row_jadwalekskul->hari) && $row_jadwalekskul->hari=="Jumat") echo "selected";?>> Jumat</option>
+                      <option value="Sabtu" <?php if (isset($row_jadwalekskul->hari) && $row_jadwalekskul->hari=="Sabtu") echo "selected";?>> Sabtu </option>
+                      <option value="Minggu" <?php if (isset($row_jadwalekskul->hari) && $row_jadwalekskul->hari=="Minggu") echo "selected";?>> Minggu </option>    
+                    </select>
+                  </div>
+                </div>
 
-                  <tr>
-                    <tr>
-                      <th>Hari</th>
-                      <th>
-                       <select required="required" name="hari" value="<?php echo $row_jadwalekskul->hari; ?>">
-                        <option value="">Pilih Hari</option>
-                        <option value="Senin" <?php if (isset($row_jadwalekskul->hari) && $row_jadwalekskul->hari=="Senin") echo "selected";?>> Senin </option>
-                        <option value="Selasa" <?php if (isset($row_jadwalekskul->hari) && $row_jadwalekskul->hari=="Selasa") echo "selected";?>> Selasa </option>
-                        <option value="Rabu" <?php if (isset($row_jadwalekskul->hari) && $row_jadwalekskul->hari=="Rabu") echo "selected";?>> Rabu </option>
-                        <option value="Kamis" <?php if (isset($row_jadwalekskul->hari) && $row_jadwalekskul->hari=="Kamis") echo "selected";?>> Kamis </option>
-                        <option value="Jumat" <?php if (isset($row_jadwalekskul->hari) && $row_jadwalekskul->hari=="Jumat") echo "selected";?>> Jumat</option>
-                        <option value="Sabtu" <?php if (isset($row_jadwalekskul->hari) && $row_jadwalekskul->hari=="Sabtu") echo "selected";?>> Sabtu </option>
-                        <option value="Minggu" <?php if (isset($row_jadwalekskul->hari) && $row_jadwalekskul->hari=="Minggu") echo "selected";?>> Minggu </option>
-                      </select> <!-- <input type="text" name="hari" placeholder="hari" value="<?php echo @$edit_jadwalekskul->hari; ?>"> --></th>
-                    </tr>
+                <div class="bigbox-mapel"> 
+                  <div class="box-mapel">
+                    <div class="form-group formgrup jarakform">
+                      <label for="jam_mulai" class="col-sm-2 control-label">Jam Mulai</label>
+                      <div class="col-sm-4">
+                        <input type="time" class="form-control" id="jam_mulai" name="jam_mulai" placeholder="Waktu" value="<?php echo @$edit_jadwalekskul->jam_mulai; ?>">
+                      </div>
+                    </div>
+                    <div class="form-group formgrup jarakform">
+                      <label for="jam_selesai" class="col-sm-2 control-label">Jam Selesai</label>
+                      <div class="col-sm-4">
+                        <input type="time" class="form-control" id="jam_selesai" name="jam_selesai" placeholder="Waktu" value="<?php echo @$edit_jadwalekskul->jam_selesai; ?>">
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
-                    <tr>
-                      <th>Jam Mulai</th>
-                      <th><input type="time" name="jam_mulai" placeholder="Waktu" value="<?php echo @$edit_jadwalekskul->jam_mulai; ?>"></th>
-                    </tr>
-                    <tr>
-                      <th>Jam Selesai</th>
-                      <th><input type="time" name="jam_selesai" placeholder="Waktu" value="<?php echo @$edit_jadwalekskul->jam_selesai; ?>"></th>
-                    </tr>
+                <div class="form-group formgrup jarakform">
+                  <label class="col-sm-2 control-label">Jenis Ekstrakurikuler</label>
+                  <div class="col-sm-4">
+                    <select class="form-control" name="id_jenis_kls_tambahan" id="kelas1" onchange="fetch_select_ekskul(this.value, 'ekskul1');" style="width: 120px;">
+                      <option value="">Pilih Ekskul</option>
+                      <?php
+                      foreach ($tabel_jenisklstambahan as $row_jenisklstambahan) { ?>
+                        <option value="<?php echo $row_jenisklstambahan->id_jenis_kls_tambahan; ?>" <?php if (@$edit_jadwalekskul->id_jenis_kls_tambahan == $row_jenisklstambahan->id_jenis_kls_tambahan) { echo " selected"; } ?>><?php echo $row_jenisklstambahan->jenis_kls_tambahan; ?></option><?php
+                      } ?>
+                    </select>
+                  </div>
+                </div>
 
-                    <tr>
-                      <th>Jenis Ekstrakurikuler</th>
-                      <th>
-                        <select class="ekskul" name="id_jenis_kls_tambahan" id="kelas1" onchange="fetch_select_ekskul(this.value, 'ekskul1');">
-                          <option value="">Pilih Ekskul</option>
-                          <?php
-                          foreach ($tabel_jenisklstambahan as $row_jenisklstambahan) {
-                            ?>
-                            <option value="<?php echo $row_jenisklstambahan->id_jenis_kls_tambahan; ?>" <?php if (@$edit_jadwalekskul->id_jenis_kls_tambahan == $row_jenisklstambahan->id_jenis_kls_tambahan) { echo " selected"; } ?>><?php echo $row_jenisklstambahan->jenis_kls_tambahan; ?></option>
-                            <?php
-                          }
-                          ?>
-                        </select>
-                      </th>
-                    </tr>
+                <div class="bigbox-mapel"> 
+                  <div class="box-mapel">
+                    <div class="form-group formgrup jarakform">
+                      <label for="tempat" class="col-sm-2 control-label">Tempat</label>
+                      <div class="col-sm-4">
+                        <input type="text" class="form-control" id="tempat" name="tempat" placeholder="tempat" value="<?php echo @$edit_jadwalekskul->tempat; ?>">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group formgrup jarakform">
+                  <label class="col-sm-2 control-label">Pembimbing</label>
+                  <div class="col-sm-4">
+                    <select class="form-control" name="id_pembimbing" style="width: 120px;">
+                      <option value="">Pilih Pembimbing</option>
+                      <?php
+                      foreach ($tabel_pembimbing as $row_pembimbing) { ?>
+                        <option value="<?php echo $row_pembimbing->id_pembimbing; ?>"  <?php if (@$edit_jadwalekskul->id_pembimbing == $row_pembimbing->id_pembimbing) { echo " selected"; } ?>><?php echo $row_pembimbing->nama_pembimbing; ?></option> <?php
+                      }?>
+                    </select>
+                  </div>
+                </div>
 
 
-                  </tr>
-                  <tr>
-                    <th>Tempat</th>
-                    <th><input type="text" name="tempat" placeholder="tempat" value="<?php echo @$edit_jadwalekskul->tempat; ?>">
-                    </th>
-
-                  </tr>
-                  <tr>
-                    <th>Pembimbing</th>
-                    <th>
-                      <select class="Pembimbing" name="id_pembimbing">
-                        <option value="">Pilih Pembimbing</option>
-                        <?php
-                        foreach ($tabel_pembimbing as $row_pembimbing) {
-                          ?>
-                          <option value="<?php echo $row_pembimbing->id_pembimbing; ?>"  <?php if (@$edit_jadwalekskul->id_pembimbing == $row_pembimbing->id_pembimbing) { echo " selected"; } ?>><?php echo $row_pembimbing->nama_pembimbing; ?></option>
-                          <?php
-                        }
-                        ?>
-                      </select>
-                    </th>
-
-                  </tr>
-
-                </tbody>
-
-              </table>
-              <button class="btn btn-danger" type="submit">Submit</button>
-            </form>
+                <div class="form-group">
+                  <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-danger">Submit</button>
+                  </div>
+                </div>
+              </form>
+            </div>
 
           </div>
           <!-- /.tab-pane -->
