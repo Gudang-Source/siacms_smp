@@ -11,6 +11,32 @@ h3.center {
 	text-align: center !important;
 }
 
+.text-right{
+	text-align: right;
+}
+
+.pd-right-50{
+	padding-right: 50px;
+}
+
+.pd-left-50{
+	padding-left: 50px;
+}
+
+.pd-bottom-15{
+	padding-bottom: 15px;
+}
+
+.btn-dark-blue{
+	background-color: #0E438E;
+	border: 0px
+}
+
+.btn-dark-blue:hover{
+	background-color: rgba(14, 67, 142, 0.85);
+	border: 0px
+}
+
 .image-left {
 	position: absolute;
     left: 340px;

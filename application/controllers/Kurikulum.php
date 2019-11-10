@@ -1043,6 +1043,8 @@ public function updatepassword() {
 			}
 		}
 
+		$tabLoc = $this->input->post('tab_loc');
+		$this->session->set_flashdata("tab_loc", $tabLoc);	
 
 		redirect('kurikulum/harirentang');
 	}
@@ -1123,6 +1125,23 @@ public function updatepassword() {
 		$this->load->model('penjadwalan/mod_jammengajar');
 		$this->mod_jammengajar->delete($this->uri->segment(3));
 		$this->session->set_flashdata("warning",'<script> swal( "Berhasil" ,  "Data terhapus !" ,  "success" )</script>');
+		$this->session->set_flashdata("tab_loc",2);
+		redirect('kurikulum/jammengajar');
+	}
+
+	public function editjammengajar() {
+		$data['nama'] = $this->session->Nama;
+		$data['foto'] = $this->session->foto; 
+		$this->load->model('penjadwalan/mod_jammengajar');
+		$data = array(
+			'NIP' => $this->input->post('modal_jam_mengajar_nama'),
+			'id_namamapel' => $this->input->post('modal_jam_mengajar_mata_pelajaran'),
+			'jatah_minim_mgjr' => $this->input->post('modal_jam_minim_mengajar')
+		);
+		$id = $this->input->post('id_jam_mengajar');
+		$this->mod_jammengajar->update($data, $id);
+		$this->session->set_flashdata("warning",'<script> swal( "Berhasil" ,  "Data diedit !" ,  "success" )</script>');
+		$this->session->set_flashdata("tab_loc",2);
 		redirect('kurikulum/jammengajar');
 	}
 
@@ -1990,6 +2009,10 @@ public function updatepassword() {
 		$id = $this->uri->segment(3);
 		$this->load->model('penjadwalan/mod_harirentang');
 		$this->mod_harirentang->delete($id);
+
+		$lastSegment = $this->uri->segment($this->uri->total_segments());
+		$tabLoc = $lastSegment == 1 ? null : $lastSegment;
+		$this->session->set_flashdata("tab_loc", $tabLoc);	
 		redirect('kurikulum/harirentang');
 	}
 
