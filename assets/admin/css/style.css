@@ -7,6 +7,20 @@
     border: 2px solid #000;
 }
 
+.form_head{
+	padding-top: 25px;
+	padding-right: 25px;
+	padding-bottom: 15px;
+}
+
+.hidden_tampilan{
+	visibility: hidden;
+}
+
+.show_tampilan{
+	visibility: visible;
+}
+
 h3.center {
 	text-align: center !important;
 }

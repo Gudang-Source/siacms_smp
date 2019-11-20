@@ -27,82 +27,100 @@
             <div class="tab-content">
               <div class="tab-pane <?php echo $this->session->flashdata('tab_loc') == null ? 'active' : '' ?>" id="jammengajar">
                 <div class="box">
+                  <form class="form-horizontal form_head" action="/action_page.php">
+                    <div class="form-group">
+                      <label class="control-label col-sm-2" for="guru">Pilih jumlah guru:</label>
+                      <div class="col-sm-10">
+                        <select class="form-control" id="guru">
+                          <option value="1" selected>1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                          <option value="5">5</option>
+                        </select>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                <div class="box">
                   <!-- /.box-header -->
                   <p style="color: #ff0000">> Pilih <b>Nama</b> guru, kemudian pilih <b>Mata Pelajaran</b> yang diampu dan isi <b>Jam Minim Mengajar</b><br>
                     > Kemudian <b>Submit</b></p>
                   <div class="box-body">
-                    <div>
-                      <!-- <div class="box-header jarakbox" style="padding-top: : 0px"> -->
-                        <form method="post" action="<?php echo site_url('kurikulum/simpanjammengajar'); ?>">
-                          <table class="table table-bordered">
-                            <thead>
-                              <tr>
-                                <th rowspan="3"><center>No.</center></th>
-                                <th rowspan="3"><center>Nama</center></th>
-                                <th rowspan="3"><center>NIP</center></th>
-                               <!--  <th rowspan="3">Kode Guru</th> -->
-                                <th rowspan="3"><center>Golongan</center></th>
-                                <th rowspan="3"><center>Jabatan Guru</center></th>
-                                <th rowspan="3"><center>Ijazah</center></th>
-                                <th rowspan="3"><center>Mata pelajaran</center></th>
-                                <th rowspan="3"><center>Jam Minim Mengajar</center></th>
-                                <!-- <th rowspan="3"><center>Jumlah jam</center></th> -->
-                              </tr>
-                            </thead>
-                            <tbody  style="text-align: center; padding-bottom: 5px">
-                              <?php
-                              for ($i=1;$i<=10;$i++) {
-                                ?>
+                    <form method="post" action="<?php echo site_url('kurikulum/simpanjammengajar'); ?>">
+                      <div>
+                        <!-- <div class="box-header jarakbox" style="padding-top: : 0px"> -->
+                          
+                            <table class="table table-bordered">
+                              <thead>
                                 <tr>
-                                  <td class="fit"><?php echo $i; ?></td>
-                                  <!-- <input type="text" name="No" value="<?php echo $i; ?>" style="width: 10%"> -->
-                                  <td>
-                                    <!-- <select class="chosen" name="NIP<?php echo $i; ?>" id="NIP<?php echo $i; ?>" onchange="getinfoguru(<?php echo $i; ?>);"> -->
-                                    <select name="NIP<?php echo $i; ?>" id="NIP<?php echo $i; ?>" onchange="getinfoguru(<?php echo $i; ?>);">
-                                    <option value="">...</option>
-                                    <?php
-                                    foreach ($tabel_pegawai as $row_pegawai) {
-                                      ?>
-                                      <option value="<?php echo $row_pegawai->NIP; ?>"><?php echo $row_pegawai->Nama; ?></option>
-                                      <?php
-                                    }
-                                    ?>
-                                  </select></td>
+                                  <th rowspan="3"><center>No.</center></th>
+                                  <th rowspan="3"><center>Nama</center></th>
+                                  <th rowspan="3"><center>NIP</center></th>
+                                <!--  <th rowspan="3">Kode Guru</th> -->
+                                  <th rowspan="3"><center>Golongan</center></th>
+                                  <th rowspan="3"><center>Jabatan Guru</center></th>
+                                  <th rowspan="3"><center>Ijazah</center></th>
+                                  <th rowspan="3"><center>Mata pelajaran</center></th>
+                                  <th rowspan="3"><center>Jam Minim Mengajar</center></th>
+                                  <!-- <th rowspan="3"><center>Jumlah jam</center></th> -->
+                                </tr>
+                              </thead>
+                              <tbody  style="text-align: center; padding-bottom: 5px" id="guru_tampil">
 
-                                  <td><span id="NIP_text<?php echo $i; ?>">-</span><?php //echo $row_pegawai->NIP; ?></td>
-                                  <!-- <td><span id="kode_text<?php echo $i; ?>">-</span><?php //echo $row_pegawai->kode_guru; ?></td> -->
-                                  <td><span id="Golongan_text<?php echo $i; ?>">-</span><?php //echo $row_pegawai->Golongan; ?></td>
-                                  <td><span id="pangkat_text<?php echo $i; ?>">-</span><?php //echo $row_pegawai->jabatan; ?></td>
-                                  <td><span id="Pendidikan_text<?php echo $i; ?>">-</span><?php //echo $row_pegawai->Pendidikan; ?></td>
-                                  <td>
-                                    <select class="kodemapel" name="id_namamapel<?php echo $i; ?>">
+                                <?php
+                                for ($i=1;$i<=10;$i++) {
+                                  ?>
+                                  <tr id="baris<?php echo $i ?>" class="hidden_tampilan">
+                                    <td class="fit"><?php echo $i; ?></td>
+                                    <td>
+                                      <select name="NIP<?php echo $i; ?>" id="NIP<?php echo $i; ?>" onchange="getinfoguru(<?php echo $i; ?>);">
                                       <option value="">...</option>
                                       <?php
-                                      foreach ($tabel_namamapel as $row_namamapel) {
+                                      foreach ($tabel_pegawai as $row_pegawai) {
                                         ?>
-                                        <option value="<?php echo $row_namamapel->id_namamapel; ?>"><?php echo $row_namamapel->nama_mapel; ?></option>
+                                        <option value="<?php echo $row_pegawai->NIP; ?>"><?php echo $row_pegawai->Nama; ?></option>
                                         <?php
                                       }
                                       ?>
-                                    </select>
-                                  </td>
-                                  <td><input type="text" name="jatah_minim_mgjr<?php echo $i; ?>"></td>
-                                  <!-- <td><center>-</center></td> -->
-                                </tr>
-                                <?php
-                              }
-                              ?>
-                            </tbody>
-                          </table>
-                        </div>
-                        </form>
+                                    </select></td>
 
+                                    <td><span id="NIP_text<?php echo $i; ?>">-</span></td>
+                                    <td><span id="Golongan_text<?php echo $i; ?>">-</span></td>
+                                    <td><span id="pangkat_text<?php echo $i; ?>">-</span></td>
+                                    <td><span id="Pendidikan_text<?php echo $i; ?>">-</span></td>
+                                    <td>
+                                      <select class="kodemapel" name="id_namamapel<?php echo $i; ?>">
+                                        <option value="">...</option>
+                                        <?php
+                                        foreach ($tabel_namamapel as $row_namamapel) {
+                                          ?>
+                                          <option value="<?php echo $row_namamapel->id_namamapel; ?>"><?php echo $row_namamapel->nama_mapel; ?></option>
+                                          <?php
+                                        }
+                                        ?>
+                                      </select>
+                                    </td>
+                                    <td><input type="text" name="jatah_minim_mgjr<?php echo $i; ?>"></td>
+                                  </tr>
+                                  <?php
+                                }
+                                ?>
+
+
+
+                              </tbody>
+                            </table>
+                          </div>
+
+                        </div>
+                        
+                        <div class="text-right pd-right-50 pd-bottom-15">
+                          <button class="btn btn-danger btn-dark-blue pd-right-50 pd-left-50" type="submit">Simpan</button>
+                        </div>
+                        <!-- /.box-body -->
                       </div>
-                      <div class="text-right pd-right-50 pd-bottom-15">
-                      <button class="btn btn-danger btn-dark-blue pd-right-50 pd-left-50" type="submit">Simpan</button>
-                      </div>
-                      <!-- /.box-body -->
-                    </div>
+                    </form>
 
                   </div>
                   <!-- /.tab-pane -->
@@ -268,6 +286,20 @@
       $("#modal_jam_minim_mengajar").val(minim_mengajar)
       $("#modal_edit_jam_mengajar").modal('show')
     })
+
+    $("#baris1").addClass('show_tampilan')
+  
+    $('#guru').on('change', function() {
+      const value = this.value
+      
+      for(var i = 1; i <= 5; i++) {
+        if (i <= value) {
+          $(`#baris${i}`).addClass('show_tampilan')
+        } else {
+          $(`#baris${i}`).removeClass('show_tampilan')
+        }
+      }
+    });
   })
 </script>
                 <script type="text/javascript">
