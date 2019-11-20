@@ -818,6 +818,49 @@ public function updatepassword() {
 		redirect('kurikulum/mapel');
 	}
 
+	public function editmapel() {
+		$data['nama'] = $this->session->Nama;
+		$data['foto'] = $this->session->foto; 
+		$this->load->model('penjadwalan/mod_mapel');
+		$this->load->model('penjadwalan/mod_kelasreguler');
+		// $this->load->model('penjadwalan/mod_tahunajaran');
+
+		$tabel_kelasreguler = $this->mod_kelasreguler->getbyjenjang($this->input->post('grade'));
+
+		// $tahun_ajaran       = $this->mod_tahunajaran->getaktif()->id_tahun_ajaran;
+
+		//print_r($tabel_kelasreguler);
+
+		foreach ($tabel_kelasreguler as $row_kelasreguler) {
+
+			$data = array(
+				'id_namamapel' => $this->input->post('id_namamapel'),
+				'kkm' => $this->input->post('kkm'),
+				'jam_belajar' => $this->input->post('jam_belajar'),
+				'id_kelas_reguler' => $row_kelasreguler->id_kelas_reguler
+			);
+
+			//print_r($data);
+			//echo "1";
+
+			if ($this->input->post('id_namamapel_old') == "") {
+				//echo "2";
+				if ($this->mod_mapel->cekdatamapel($this->input->post('id_namamapel'), $row_kelasreguler->id_kelas_reguler) == 0) {
+					//echo "3";
+					$this->mod_mapel->insert($data);	
+				} 
+
+			} else {
+				//echo "4";
+				$this->mod_mapel->updatebyidnamaidkelasreguler($data, $row_kelasreguler->id_kelas_reguler, $this->input->post('id_namamapel_old'));
+			}	
+		}
+
+		$this->session->set_flashdata("warning",'<script> swal( "Berhasil" ,  "Data tersimpan !" ,  "success" )</script>');
+		$this->session->set_flashdata("tab_pos", 2);
+		redirect('kurikulum/mapel');
+	}
+
 	public function hapusmapel() {
 		$data['nama'] = $this->session->Nama;
 		$data['foto'] = $this->session->foto; 
@@ -829,7 +872,9 @@ public function updatepassword() {
 	public function hapusmapelbyidjenjang() {
 		$data['nama'] = $this->session->Nama;
 		$data['foto'] = $this->session->foto; 
+
 		$this->load->model('penjadwalan/mod_kelasreguler');
+
 		$id_kelas_reguler = $this->uri->segment(4);
 		$id_namamapel = $this->uri->segment(6);
 		$row_kelasreguler = $this->mod_kelasreguler->select($id_kelas_reguler);
@@ -837,13 +882,12 @@ public function updatepassword() {
 		$this->load->model('penjadwalan/mod_mapel');
 		$tabel_kelasreguler = $this->mod_kelasreguler->getbyjenjang($row_kelasreguler->jenjang);
 
-		//print_r($tabel_kelasreguler);
-
 		foreach ($tabel_kelasreguler as $row_kelasreguler) {
 			$this->mod_mapel->deletebyidkelasregulermapel($row_kelasreguler->id_kelas_reguler, $id_namamapel);
 		}
 
 		$this->session->set_flashdata("warning",'<script> swal( "Berhasil" ,  "Data terhapus !" ,  "success" )</script>');
+		$this->session->set_flashdata("tab_pos", 2);
 		redirect('kurikulum/mapel');
 	}
 

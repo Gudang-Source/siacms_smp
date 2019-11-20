@@ -17,7 +17,7 @@ class Mod_mapel extends CI_Model {
 	}
 
 	public function getgroupbyjenjang2(){
-		$this->db->select('mapel.id_namamapel, namamapel.nama_mapel as nama_mapel,mapel.kkm,mapel.jam_belajar,mapel.id_tahun_ajaran, kelas_reguler.jenjang, kelas_reguler.id_kelas_reguler, (SELECT COUNT(jenjang) FROM kelas_reguler kr WHERE kr.jenjang = kelas_reguler.jenjang) AS totalkelas');
+		$this->db->select('mapel.id_mapel AS mapel_id_key, mapel.id_namamapel, namamapel.nama_mapel as nama_mapel,mapel.kkm,mapel.jam_belajar,mapel.id_tahun_ajaran, kelas_reguler.jenjang, kelas_reguler.id_kelas_reguler, (SELECT COUNT(jenjang) FROM kelas_reguler kr WHERE kr.jenjang = kelas_reguler.jenjang) AS totalkelas');
 		$this->db->join('namamapel', 'namamapel.id_namamapel=mapel.id_namamapel', 'left');
 		$this->db->join('kelas_reguler', 'kelas_reguler.id_kelas_reguler=mapel.id_kelas_reguler', 'left');
 		$this->db->group_by('mapel.id_namamapel, namamapel.nama_mapel,mapel.kkm,mapel.jam_belajar,mapel.id_tahun_ajaran, kelas_reguler.jenjang, kelas_reguler.id_kelas_reguler');

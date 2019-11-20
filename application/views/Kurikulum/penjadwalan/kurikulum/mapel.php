@@ -23,11 +23,11 @@
         <div class="col-md-12">
           <div class="nav-tabs-custom">
             <ul class="nav nav-tabs">
-              <li class="active"><a href="#kelolamapel" data-toggle="tab"><?php if ($edit_mapel) { echo "Edit"; } else { echo "Tambah"; } ?> Mata Pelajaran</a></li>
-              <li><a href="#datamapel" data-toggle="tab">Data Mata Pelajaran </a></li>
+              <li class="<?php echo $this->session->flashdata('tab_pos') == null ? 'active' : '' ?>"><a href="#kelolamapel" data-toggle="tab"><?php if ($edit_mapel) { echo "Edit"; } else { echo "Tambah"; } ?> Mata Pelajaran</a></li>
+              <li class="<?php echo $this->session->flashdata('tab_pos') == 2 ? 'active' : '' ?>"><a href="#datamapel" data-toggle="tab">Data Mata Pelajaran </a></li>
             </ul>
             <div class="tab-content">
-              <div class="active tab-pane" id="kelolamapel">
+              <div class="tab-pane <?php echo $this->session->flashdata('tab_pos') == null ? 'active' : '' ?>" id="kelolamapel">
               <div class="box-header">
               <form>
                       <select name="pilihgrade" id="pilihgrade" onchange="document.getElementById('grade').value = document.getElementById('pilihgrade').value; if (document.getElementById('pilihgrade').value == 'Ekskul') { document.getElementById('formmapel').style.display = 'none'; document.getElementById('formekskul').style.display = 'block'; } else { document.getElementById('formmapel').style.display = 'block'; document.getElementById('formekskul').style.display = 'none'; }">
@@ -92,11 +92,9 @@
 
                
               </div>
-              <!-- /.tab-pane -->
-
-              <!-- /.tab-pane -->
+              
               <div> <?php echo $this->session->flashdata('warning') ?></div>
-              <div class="tab-pane" id="datamapel">
+              <div class="tab-pane <?php echo $this->session->flashdata('tab_pos') == 2 ? 'active' : '' ?>" id="datamapel">
               <!-- DATA MAPEL KELAS 7 -->
                 <div class="box">
                   <div class="box-header" style="background-color:     #5c8a8a">
@@ -112,6 +110,7 @@
                         <th>KKM</th>
                         <th>Jam Belajar per Minggu</th>
                         <th>Kelas</th>
+                        <th>Jumlah Kelas</th>
                         <th>Jumlah Jam Belajar<br>
                         (Jam Belajar x Jumlah Kelas)</th>
                         <th>Action</th>
@@ -135,9 +134,20 @@
                         <td><?php echo $row_mapel->kkm; ?></td>
                         <td><?php echo $row_mapel->jam_belajar; ?></td>
                         <td><?php echo $row_mapel->jenjang; ?></td>
+                        <td><?php echo $row_mapel->totalkelas ?></td>
                         <td><?php echo ($row_mapel->totalkelas*$row_mapel->jam_belajar); ?></td>
                         <td> 
-                          <a class="btn btn-block btn-primary button-action btnedit" href="<?php echo site_url('kurikulum/mapel/'.$row_mapel->id_kelas_reguler.'/'.$row_mapel->jenjang.'/'.str_replace(" ", "_", $row_mapel->id_namamapel)); ?>" > Edit </a>
+                          <!-- <a class="btn btn-block btn-primary button-action btnedit" href="<?php echo site_url('kurikulum/mapel/'.$row_mapel->id_kelas_reguler.'/'.$row_mapel->jenjang.'/'.str_replace(" ", "_", $row_mapel->id_namamapel)); ?>" > Edit </a> -->
+                          <button
+                            class="btn btn-block btn-primary button-action btnedit trigger_edit_mapel"
+                            id_namamapel="<?php echo $row_mapel->id_namamapel ?>"
+                            kkm="<?php echo $row_mapel->kkm ?>"
+                            jam_belajar="<?php echo $row_mapel->jam_belajar ?>"
+                            id_mapel="<?php echo $row_mapel->mapel_id_key ?>"
+                            grade="<?php echo $row_mapel->jenjang ?>"
+                          >
+                            Edit
+                          </button>
                           <a onclick="return confirm('Apakah Anda yakin?')" class="btn btn-danger btn-primary button-action btnhapus" href="<?php echo site_url('kurikulum/hapusmapelbyidjenjang/'.$row_mapel->id_kelas_reguler.'/'.$row_mapel->jenjang.'/'.str_replace(" ", "_", $row_mapel->id_namamapel)); ?>" > Hapus </a>
                         </td>               
                       </tr>
@@ -161,10 +171,7 @@
               <!-- DATA MAPEL KELAS 9 -->
                 
               </div>
-              <!-- /.tab-pane -->
-
-              <!-- /.tab-pane -->
-
+              
               <div class="tab-pane" id="editdatamapel">
               <form class="form-horizontal formmapel">
                   <div class="bigbox-mapel"> 
@@ -202,7 +209,6 @@
 
                 </div>
 
-              <!-- /.tab-pane -->
 
 
             </div>
@@ -218,4 +224,78 @@
     </section>
     <!-- /.content -->
   </div>
-  <!-- /.content-wrapper
+
+  <div id="modal_edit_mapel" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="post" class="form-horizontal" action="<?php echo site_url('kurikulum/editmapel'); ?>" id="modal_form_url">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Edit Mapel</h4>
+        </div>
+        <div class="modal-body">
+        <input type="hidden" name="id_mapel" id="modal_id_mapel"  value=""/>
+        <input type="hidden" name="id_namamapel_old" id="modal_id_namamapel_old"  value=""/>
+        <input type="hidden" name="grade" id="modal_grade"  value=""/>
+
+          <div class="form-group formgrup jarakform">
+            <label class="col-sm-4 control-label">Pilih Mata Pelajaran</label>
+            <div class="col-sm-8">
+                <select class="kodemapel" name="id_namamapel">
+                  <option value="">Pilih mapel</option>
+                  <?php
+                foreach ($tabel_namamapel as $row_namamapel) {
+                ?>
+                <option value="<?php echo $row_namamapel->id_namamapel; ?>" class="modal_nama_mapel<?php echo $row_namamapel->id_namamapel; ?>"><?php echo $row_namamapel->nama_mapel; ?></option>
+                <?php
+                }
+                ?>
+                </select>
+            </div>
+          </div>
+
+          <div class="form-group formgrup jarakform">
+            <label class="col-sm-4 control-label">KKM</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" name="kkm" placeholder="KKM"  value="" id="modal_kkm">
+            </div>
+          </div>
+
+          <div class="form-group formgrup jarakform">
+            <label class="col-sm-4 control-label">Jam Belajar </br> per minggu</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" id="modal_jam_belajar" name="jam_belajar" placeholder="Jam Belajar"  value="">
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">Simpan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    $(".trigger_edit_mapel").click(function() {
+      var form_url = $(this).attr('form_url')
+      var id_namamapel = $(this).attr('id_namamapel')
+      var kkm = $(this).attr('kkm')
+      var jam_belajar = $(this).attr('jam_belajar')
+      var id_mapel = $(this).attr('id_mapel')
+      var grade = $(this).attr('grade')
+
+      $("#modal_form_url").attr('action', form_url)
+      $(`.modal_nama_mapel${id_namamapel}`).attr('selected', true)
+      $("#modal_kkm").val(kkm)
+      $("#modal_jam_belajar").val(jam_belajar)
+      $("#modal_id_mapel").val(id_mapel)
+      $("#modal_id_namamapel_old").val(id_namamapel)
+      $("#modal_grade").val(grade)
+
+      $("#modal_edit_mapel").modal('show')
+    })
+  })
+</script>
