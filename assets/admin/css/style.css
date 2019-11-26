@@ -41,6 +41,36 @@ h3.center {
 	padding-bottom: 15px;
 }
 
+.modal-full{
+	width: 100%;
+	margin: 0px;
+}
+
+.mg-top-30{
+	margin-top: 30px;
+}
+
+.mg-right-15{
+	margin-right: 15px;
+}
+
+.mg-right-15{
+	margin-right: 15px;
+}
+
+.mg-top-50{
+	margin-top: 50px;
+}
+
+.mg-top-15{
+	margin-top: 15px;
+}
+
+.big-button{
+	font-size: 20px;
+	padding: 15px 40px;
+}
+
 .btn-dark-blue{
 	background-color: #0E438E;
 	border: 0px

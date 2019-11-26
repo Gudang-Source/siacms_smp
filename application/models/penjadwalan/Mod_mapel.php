@@ -7,6 +7,12 @@ class Mod_mapel extends CI_Model {
 		return $this->db->get('mapel')->result();
 	}
 
+	public function getJoinMapel(){
+		$this->db->select('mapel.id_mapel, mapel.id_namamapel, namamapel.nama_mapel as nama_mapel,mapel.kkm ,mapel.jam_belajar,mapel.id_tahun_ajaran');
+		$this->db->join('namamapel', 'namamapel.id_namamapel=mapel.id_namamapel', 'left');
+		return $this->db->get('mapel')->result();
+	}
+
 	public function getgroupbyjenjang(){
 		$this->db->select('mapel.id_namamapel, namamapel.nama_mapel as nama_mapel,mapel.kkm,mapel.jam_belajar,mapel.id_tahun_ajaran, kelas_reguler.jenjang, kelas_reguler.id_kelas_reguler');
 		$this->db->join('namamapel', 'namamapel.id_namamapel=mapel.id_namamapel', 'left');

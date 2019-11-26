@@ -1138,6 +1138,20 @@ public function updatepassword() {
 		echo $data;
 	}
 
+	public function getKelasByJenjang($jenjang)
+	{
+		$data['nama'] = $this->session->Nama;
+		$data['foto'] = $this->session->foto; 
+		$this->load->model('penjadwalan/mod_kelasreguler');
+
+		
+		$row_jenjang = $this->mod_kelasreguler->getbyjenjang($jenjang);
+		$rows = array();
+		$rows = $row_jenjang;
+		$data = "{\"data\":".json_encode($rows)."}";
+		echo $data;
+	}
+
 	public function simpanjammengajar() 
 	{
 		$data['nama'] = $this->session->Nama;
@@ -1205,18 +1219,20 @@ public function updatepassword() {
 		$data['tabel_namamapel'] = $this->mod_namamapel->get();
 		$this->load->model('penjadwalan/mod_mapel');
 		$data['tabel_mapel'] = $this->mod_mapel->get();
+		$data['tabel_mapel_join_mapel'] = $this->mod_mapel->getJoinMapel();
 		$this->load->model('penjadwalan/mod_prioritaskhusus');
 		$data['tabel_prioritaskhusus'] = $this->mod_prioritaskhusus->get();
 		$this->load->model('penjadwalan/mod_kelasreguler');
 		$tabel_kelasreguler = $this->mod_kelasreguler->get(array("jenjang"=>$jenjang));
+		$data['data_jenjang'] = $this->mod_kelasreguler->getgroupby();
 		$data['tabel_kelasreguler'] = $tabel_kelasreguler;
 		$this->load->model('penjadwalan/mod_pegawai');
 		$data['tabel_pegawai'] = $this->mod_pegawai->get(array("Status"=>"Guru"));
 		$this->load->model('penjadwalan/mod_jammengajar');
 		$this->load->model('penjadwalan/mod_jadwalmapel');
 		$this->load->model('penjadwalan/mod_harirentang');
-		
-
+		$this->load->model('penjadwalan/mod_tahunajaran');
+		$data['tabel_tahunajaran'] = $this->mod_tahunajaran->get();
 
 		for ($i=0; $i<=12; $i++) {
 			$data['hari_rentang']['Senin'][$i] = $this->mod_harirentang->selectdata('Senin', $i);
@@ -1749,6 +1765,79 @@ public function updatepassword() {
 	public function simpanjadwalguru($hari, $jenjang){
 		$data['nama'] = $this->session->Nama;
 		$data['foto'] = $this->session->foto; 
+		$this->load->model('penjadwalan/mod_jadwalmapel');
+		$this->load->model('penjadwalan/mod_kelasreguler');
+		$this->load->model('penjadwalan/mod_harirentang');
+
+		$this->load->model('penjadwalan/setting_model');
+		$setting = $this->setting_model->getsetting();
+		$id_tahun_ajaran = $setting->id_tahun_ajaran;
+
+		$tabel_kelasreguler = $this->mod_kelasreguler->get(array("jenjang"=>$jenjang));
+		$data['tabel_kelasreguler'] = $tabel_kelasreguler;
+
+		for ($i=0; $i<=12; $i++) {
+			foreach ($tabel_kelasreguler as $row_kelasreguler) {
+				$inputpost = $this->input->post('jadwal_'.$hari.'_'.$row_kelasreguler->id_kelas_reguler.'_'.$i);
+				if ($inputpost != '') {
+					$arrinput = explode("_", $inputpost);
+					$NIP = $arrinput[0];
+					$id_namamapel = $arrinput[1];
+					$cek = array(
+							'id_kelas_reguler'=>$row_kelasreguler->id_kelas_reguler,
+							'id_tahun_ajaran' => $id_tahun_ajaran,
+							'jam_ke' => "$i",
+							'hari' => ucfirst($hari)
+
+						);
+					$data = array(
+							'id_namamapel' => $id_namamapel,
+							'id_kelas_reguler'=>$row_kelasreguler->id_kelas_reguler,
+							'NIP' => $NIP,
+							'id_tahun_ajaran' => $id_tahun_ajaran,
+							'jam_ke' => "$i",
+							'hari' => ucfirst($hari)
+
+						);
+					$tabel_jadwalmapel = $this->mod_jadwalmapel->get($cek);
+					if ($tabel_jadwalmapel) {
+						$this->mod_jadwalmapel->update($data, $tabel_jadwalmapel[0]->id_jadwal_mapel);
+						
+						$row_harirentang = $this->mod_harirentang->selectdata(ucfirst($hari), "$i");
+						$this->mod_jadwalmapel->update(array("id_rentang_jam"=>@$row_harirentang->id_rentang_jam), $tabel_jadwalmapel[0]->id_jadwal_mapel);
+						
+					} else {
+						$this->mod_jadwalmapel->insert($data);	
+						$id_jadwal_mapel = $this->db->insert_id();
+						
+						$row_harirentang = $this->mod_harirentang->selectdata(ucfirst($hari), "$i");
+						$this->mod_jadwalmapel->update(array("id_rentang_jam"=>@$row_harirentang->id_rentang_jam), $id_jadwal_mapel);
+					}
+				} else {
+					$data = array(
+							'id_kelas_reguler'=>$row_kelasreguler->id_kelas_reguler,
+							'id_tahun_ajaran' => $id_tahun_ajaran,
+							'jam_ke' => "$i",
+							'hari' => ucfirst($hari)
+
+						);
+					$this->mod_jadwalmapel->deletejadwal($data);
+				}
+			}
+
+		}
+
+		redirect('kurikulum/jadwalmapel');
+
+	}
+
+	public function simpanjadwalgurukurikulum($hari, $jenjang){
+		$data['nama'] = $this->session->Nama;
+		$data['foto'] = $this->session->foto;
+
+		$hari = $this->input->post('hari');
+		$jenjang = $this->input->post('jenjang');
+
 		$this->load->model('penjadwalan/mod_jadwalmapel');
 		$this->load->model('penjadwalan/mod_kelasreguler');
 		$this->load->model('penjadwalan/mod_harirentang');
