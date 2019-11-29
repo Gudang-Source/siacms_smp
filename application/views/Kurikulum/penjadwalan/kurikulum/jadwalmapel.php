@@ -72,7 +72,8 @@
                       <div class="form-group">
                         <label for="harimapel">Hari</label>
                         <select class="form-control" id="harimapel" name="harimapel">
-                          <option value="senin">Senin</option>
+                          <option value="">Semua Hari</option>
+                          <option value="senin" selected>Senin</option>
                           <option value="selasa">Selasa</option>
                           <option value="rabu">Rabu</option>
                           <option value="kamis">Kamis</option>
@@ -1297,8 +1298,12 @@
     });
 
     $('#harimapel').on('change', function() {
-      $('.tampilkan').removeClass('tampilkan-table')
-      $(`#tampil-${this.value}`).addClass('tampilkan-table')
+      if (this.value == '') {
+        $('.tampilkan').addClass('tampilkan-table')
+      } else {
+        $('.tampilkan').removeClass('tampilkan-table')
+        $(`#tampil-${this.value}`).addClass('tampilkan-table')
+      }
     });
 
     
