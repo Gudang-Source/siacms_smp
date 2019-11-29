@@ -33,4 +33,11 @@ class Mod_harirentang extends CI_Model {
 		$this->db->where('jam_ke',$jam_ke); 
 		return $this->db->get('hari_rentang')->row();
 	}
+
+	public function getbyTahunDanHari($idTahun, $hari){
+		$array = array('hari' => $hari, 'id_tahun_ajaran' => $idTahun);
+
+		$this->db->where($array); 
+		return $this->db->get('hari_rentang')->result();
+	}
 }

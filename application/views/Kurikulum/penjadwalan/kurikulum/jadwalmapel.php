@@ -55,16 +55,37 @@
             <div class="tab-pane" id="jadwalmapel">
               <div class="box">
                 <div class="box-header">
-                  <form>
-                    <select id="jenjangjadwalmapel2" onchange="document.location = '<?php echo site_url('kurikulum/jadwalmapel'); ?>/' + document.getElementById('jenjangjadwalmapel2').value;">
-                      <option value="7" <?php if ($jenjang == '7') { echo " selected"; } ?>> KELAS 7</option>
-                      <option value="8" <?php if ($jenjang == '8') { echo " selected"; } ?>> KELAS 8</option>
-                      <option value="9" <?php if ($jenjang == '9') { echo " selected"; } ?>> KELAS 9</option>
-                    </select>
-                  </form>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="jenjangmapel">Jenjang</label>
+                        <select class="form-control" id="jenjangjadwalmapel2" onchange="document.location = '<?php echo site_url('kurikulum/jadwalmapel'); ?>/' + document.getElementById('jenjangjadwalmapel2').value;" name="jenjangmapel">
+                          <option value="7" <?php if ($jenjang == '7') { echo " selected"; } ?>> KELAS 7</option>
+                          <option value="8" <?php if ($jenjang == '8') { echo " selected"; } ?>> KELAS 8</option>
+                          <option value="9" <?php if ($jenjang == '9') { echo " selected"; } ?>> KELAS 9</option>
+                        </select>
+                      </div>   
+                    </div> 
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="harimapel">Hari</label>
+                        <select class="form-control" id="harimapel" name="harimapel">
+                          <option value="senin">Senin</option>
+                          <option value="selasa">Selasa</option>
+                          <option value="rabu">Rabu</option>
+                          <option value="kamis">Kamis</option>
+                          <option value="jumat">Jum'at</option>
+                          <option value="sabtu">Sabtu</option>
+                          <option value="minggu">Minggu</option>
+                        </select>
+                      </div>   
+                    </div> 
+                  </div>
                 </div>
                 <div class="box-body">
-                  <table class="table table-bordered table-striped tabelmapel">
+                  <table class="table table-bordered table-striped tabelmapel tampilkan tampilkan-table" id="tampil-senin">
                     <thead>
                       <tr class="barishari">
                         <th class="tengah" rowspan="2">Jam ke</th>
@@ -83,7 +104,7 @@
                     </thead>
                     <tbody>
                       <?php 
-                      for($i=0;$i<=12;$i++)  {
+                      for($i=1;$i<=12;$i++)  {
                         ?>
                         <tr>
                           <td class="fit"><?php echo $i; ?></td>
@@ -140,9 +161,8 @@
                </tbody>
 
              </table>
-             <br>
 
-             <table class="table table-bordered table-striped tabelmapel">
+             <table class="table table-bordered table-striped tabelmapel tampilkan" id="tampil-selasa">
               <thead>
                 <tr class="barishari">
                   <th class="tengah" rowspan="2">Jam ke</th>
@@ -221,9 +241,8 @@
           </tbody>
 
         </table>
-        <br>
 
-        <table class="table table-bordered table-striped tabelmapel">
+        <table class="table table-bordered table-striped tabelmapel tampilkan" id="tampil-rabu">
           <thead>
             <tr class="barishari">
               <th class="tengah" rowspan="2">Jam ke</th>
@@ -300,9 +319,8 @@
       </tbody>
 
     </table>
-    <br>
 
-    <table class="table table-bordered table-striped tabelmapel">
+    <table class="table table-bordered table-striped tabelmapel tampilkan" id="tampil-kamis">
       <thead>
         <tr class="barishari">
           <th class="tengah" rowspan="2">Jam ke</th>
@@ -379,9 +397,8 @@
   </tbody>
 
 </table>
-<br>
 
-<table class="table table-bordered table-striped tabelmapel">
+<table class="table table-bordered table-striped tabelmapel tampilkan" id="tampil-jumat">
   <thead>
     <tr class="barishari">
       <th class="tengah" rowspan="2">Jam ke</th>
@@ -458,8 +475,7 @@
 </tbody>
 
 </table>
-<br>
-<table class="table table-bordered table-striped tabelmapel">
+<table class="table table-bordered table-striped tabelmapel tampilkan" id="tampil-sabtu">
   <thead>
     <tr class="barishari">
       <th class="tengah" rowspan="2">Jam ke</th>
@@ -536,9 +552,8 @@
 </tbody>
 
 </table>
-<br>
 
-<table class="table table-bordered table-striped tabelmapel">
+<table class="table table-bordered table-striped tabelmapel tampilkan" id="tampil-minggu">
   <thead>
     <tr class="barishari">
       <th class="tengah" rowspan="2">Jam ke</th>
@@ -631,15 +646,6 @@
 
   <div class="tab-pane" id="kelolajadwalmapel">
     <div class="box">
-      <!-- <div class="box-header">
-        <form>
-          <select id="jenjangjadwalmapel" onchange="document.location = '<?php echo site_url('kurikulum/jadwalmapel'); ?>/' + document.getElementById('jenjangjadwalmapel').value;">
-            <option value="7" <?php if ($jenjang == '7') { echo " selected"; } ?>> KELAS 7</option>
-            <option value="8" <?php if ($jenjang == '8') { echo " selected"; } ?>> KELAS 8</option>
-            <option value="9" <?php if ($jenjang == '9') { echo " selected"; } ?>> KELAS 9</option>
-          </select>
-        </form>
-      </div> -->
 
       <!-- /.box-header -->
       <div class="box-body">
@@ -685,30 +691,8 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label for="kelas">Kelas</label>
-                  <select class="form-control" id="kelas" name="kelas">
+                  <select class="form-control" id="kelas" name="kelas" disabled>
 
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            <!-- <div>
-              <?php print("<pre>".print_r($tabel_mapel_join_mapel,true)."</pre>"); ?>
-            </div> -->
-
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label for="pelajaran">Pelajaran & Guru</label>
-                  <select class="form-control" id="pelajaran" name="pelajaran">
-                    <option value="">Pilih Mata Pelajaran</option>
-                    <?php
-                      foreach ($tabel_mapel_join_mapel as $row_mapel) { ?>
-                        <option value="<?php echo $row_mapel->id_namamapel ?>">
-                          <?php echo $row_mapel->nama_mapel ?>
-                        </option> <?php
-                      }
-                    ?>
                   </select>
                 </div>
               </div>
@@ -717,15 +701,43 @@
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
-                  <label for="guru">Guru</label>
-                  <select class="form-control" id="guru" name="guru">
+                  <label for="mapel">Mapel & Guru</label>
+                  <select data-placeholder="Pilih" class="kodeguru form-control" name="mapel" id="mapel">
                     <option value="">Pilih Guru</option>
-                    <?php
-                      foreach ($tabel_pegawai as $row_pegawai) { ?>
-                        <option value="<?php echo $row_pegawai->NIP ?>">
-                          <?php echo $row_pegawai->Nama ?>
-                        </option> <?php
+                    <?php 
+                    foreach (@$tabel_jadwalprioritas_senin[$i] as $rowjadwalprioritas) {
+                      $ada = false;
+                      foreach (@$tabel_jadwalkhusus_senin[$i] as $rowjadwalkhusus) {
+                        if ($rowjadwalprioritas->NIP == $rowjadwalkhusus->NIP) {
+                          $ada = true;
+                        }
                       }
+                      if ($ada == false) {
+                        ?>
+                        <option class="kuning" value="<?php echo $rowjadwalprioritas->NIP; ?>_<?php echo $rowjadwalprioritas->id_namamapel; ?>" <?php if ((@$tabel_jadwalmapel_senin[$row_kelasreguler->id_kelas_reguler][$i][0]->NIP == $rowjadwalprioritas->NIP) && (@$tabel_jadwalmapel_senin[$row_kelasreguler->id_kelas_reguler][$i][0]->id_namamapel == $rowjadwalprioritas->id_namamapel)) { echo " selected"; } ?>><?php echo $rowjadwalprioritas->Nama; ?>(<?php echo $rowjadwalprioritas->nama_panggilan; ?>)</option>
+                        <?php
+                      }
+                    }
+                    ?>
+                    <?php 
+                    foreach (@$tabel_jammengajar as $rowjammengajar) {
+                      $ada = false;
+                      foreach (@$tabel_jadwalprioritas_senin[$i] as $rowjadwalprioritas) {
+                        if (($rowjammengajar->NIP == $rowjadwalprioritas->NIP) && ($rowjammengajar->id_namamapel == $rowjadwalprioritas->id_namamapel)) {
+                          $ada = true;
+                        }
+                      }
+                      foreach (@$tabel_jadwalkhusus_senin[$i] as $rowjadwalkhusus) {
+                        if ($rowjammengajar->NIP == $rowjadwalkhusus->NIP) {
+                          $ada = true;
+                        }
+                      }
+                      if ($ada == false) {
+                        ?>
+                        <option class="putih" value="<?php echo $rowjammengajar->NIP; ?>_<?php echo $rowjammengajar->id_namamapel; ?>" <?php if ((@$tabel_jadwalmapel_senin[$row_kelasreguler->id_kelas_reguler][$i][0]->NIP == $rowjammengajar->NIP) && (@$tabel_jadwalmapel_senin[$row_kelasreguler->id_kelas_reguler][$i][0]->id_namamapel == $rowjammengajar->id_namamapel)) { echo " selected"; } ?>><?php echo $rowjammengajar->nama_mapel; ?>(<?php echo $rowjammengajar->nama_panggilan; ?>)</option>
+                        <?php
+                      }
+                    }
                     ?>
                   </select>
                 </div>
@@ -737,8 +749,7 @@
                 <div class="form-group">
                   <label for="hari">Hari</label>
                   <select class="form-control" id="hari" name="hari">
-                    <option value="">Hari</option>
-                    <option value="senin">Senin</option>
+                    <option value="senin" selected>Senin</option>
                     <option value="selasa">Selasa</option>
                     <option value="rabu">Rabu</option>
                     <option value="kamis">Kamis</option>
@@ -749,72 +760,16 @@
                 </div>
               </div>
             </div>
-            
-            <table  class="table table-bordered table-striped tabelmapel">
-              <thead>
-                <th>Jam</th>
-                <th></th>
-              </thead>
-              <tbody>
-                <?php 
-                for($i=0;$i<=12;$i++)  {
-                  ?>
-                  <tr>
-                    <td class="fit"><?php echo $i; ?></td>
-                    <th><?php echo @substr($hari_rentang['Senin'][$i]->jam_mulai,0,5)."-".@substr($hari_rentang['Senin'][$i]->jam_selesai,0,5); ?></th>
-                    <?php
-                    foreach ($tabel_kelasreguler as  $row_kelasreguler) {
-                      ?>
-                      <th>
-                        <select data-placeholder="Pilih" class="kodeguru" name="jadwal_senin_<?php echo $row_kelasreguler->id_kelas_reguler; ?>_<?php echo $i; ?>" id="jadwal_senin_<?php echo $row_kelasreguler->id_kelas_reguler; ?>_<?php echo $i; ?>" style="width: 120px;">
-                          <option value="">...</option>
-                          <?php 
-                          foreach (@$tabel_jadwalprioritas_senin[$i] as $rowjadwalprioritas) {
-                            $ada = false;
-                            foreach (@$tabel_jadwalkhusus_senin[$i] as $rowjadwalkhusus) {
-                              if ($rowjadwalprioritas->NIP == $rowjadwalkhusus->NIP) {
-                                $ada = true;
-                              }
-                            }
-                            if ($ada == false) {
-                              ?>
-                              <option class="kuning" value="<?php echo $rowjadwalprioritas->NIP; ?>_<?php echo $rowjadwalprioritas->id_namamapel; ?>" <?php if ((@$tabel_jadwalmapel_senin[$row_kelasreguler->id_kelas_reguler][$i][0]->NIP == $rowjadwalprioritas->NIP) && (@$tabel_jadwalmapel_senin[$row_kelasreguler->id_kelas_reguler][$i][0]->id_namamapel == $rowjadwalprioritas->id_namamapel)) { echo " selected"; } ?>><?php echo $rowjadwalprioritas->Nama; ?>(<?php echo $rowjadwalprioritas->nama_panggilan; ?>)</option>
-                              <?php
-                            }
-                          }
-                          ?>
-                          <?php 
-                          foreach (@$tabel_jammengajar as $rowjammengajar) {
-                            $ada = false;
-                            foreach (@$tabel_jadwalprioritas_senin[$i] as $rowjadwalprioritas) {
-                              if (($rowjammengajar->NIP == $rowjadwalprioritas->NIP) && ($rowjammengajar->id_namamapel == $rowjadwalprioritas->id_namamapel)) {
-                                $ada = true;
-                              }
-                            }
-                            foreach (@$tabel_jadwalkhusus_senin[$i] as $rowjadwalkhusus) {
-                              if ($rowjammengajar->NIP == $rowjadwalkhusus->NIP) {
-                                $ada = true;
-                              }
-                            }
-                            if ($ada == false) {
-                              ?>
-                              <option class="putih" value="<?php echo $rowjammengajar->NIP; ?>_<?php echo $rowjammengajar->id_namamapel; ?>" <?php if ((@$tabel_jadwalmapel_senin[$row_kelasreguler->id_kelas_reguler][$i][0]->NIP == $rowjammengajar->NIP) && (@$tabel_jadwalmapel_senin[$row_kelasreguler->id_kelas_reguler][$i][0]->id_namamapel == $rowjammengajar->id_namamapel)) { echo " selected"; } ?>><?php echo $rowjammengajar->nama_mapel; ?>(<?php echo $rowjammengajar->nama_panggilan; ?>)</option>
-                              <?php
-                            }
-                          }
-                          ?>
-                        </select>
-                      </th>
-                      <?php
-                    }
-                    ?>
-                  </tr>
-                  <?php
-                }
-                ?>
-              </tbody>
 
-            </table>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="jamke">Jam Ke</label>
+                  <select class="form-control" id="jamke" name="jamke" disabled>
+                  </select>
+                </div>
+              </div>
+            </div>
 
             <div class="text-right">
               <button type="submit" class="btn btn-info">Simpan</button>
@@ -1270,8 +1225,10 @@
 
     $('#jenjang').on('change', function() {
       if (this.value == '') {
+        $("#kelas").attr('disabled', true)
         $("#kelas").html('')
       } else {
+        $("#kelas").attr('disabled', false)
         $.ajax({
           url: '<?php echo site_url('kurikulum/getKelasByJenjang'); ?>/'+this.value,
           dataType: 'json',
@@ -1288,5 +1245,62 @@
         });
       }
     });
+
+    // $('#jenjangmapel').on('change', function() {
+    //   if (this.value == '') {
+    //     $("#kelasmapel").attr('disabled', true)
+    //     $("#kelasmapel").html('')
+    //   } else {
+    //     $("#kelasmapel").attr('disabled', false)
+    //     $.ajax({
+    //       url: '<?php echo site_url('kurikulum/getKelasByJenjang'); ?>/'+this.value,
+    //       dataType: 'json',
+    //       cache: false,
+    //       success: function(msg){
+    //         let el = ""
+
+    //         for (const row of msg.data) {
+    //           el += `<option value="${row.id_kelas_reguler}">${row.nama_kelas}</option>`
+    //         }
+            
+    //         $("#kelasmapel").html(el)
+    //       }
+    //     });
+    //   }
+    // });
+
+    $('#tahunajaran, #hari').on('change', function() {
+      var id_tahunpelajaran = $("#tahunajaran").val()
+
+      if (id_tahunpelajaran == '') {
+        $("#jamke").attr('disabled', true)
+        $("#jamke").html('')
+      } else {
+        $("#jamke").attr('disabled', false)
+        var hari = $("#hari").val()
+
+        $.ajax({
+          url: '<?php echo site_url('kurikulum/getJamKeByTahunDanHari'); ?>/'+id_tahunpelajaran+'/'+hari,
+          dataType: 'json',
+          cache: false,
+          success: function(msg){
+            let el = ""
+            console.log(msg)
+            for (const row of msg.data) {
+              el += `<option value="${row.jam_ke}">${row.jam_ke} (${row.jam_mulai}-${row.jam_selesai})</option>`
+            }
+            
+            $("#jamke").html(el)
+          }
+        });
+      }
+    });
+
+    $('#harimapel').on('change', function() {
+      $('.tampilkan').removeClass('tampilkan-table')
+      $(`#tampil-${this.value}`).addClass('tampilkan-table')
+    });
+
+    
 
   </script>

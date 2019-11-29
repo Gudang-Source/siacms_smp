@@ -46,6 +46,14 @@ h3.center {
 	margin: 0px;
 }
 
+.tampilkan{
+	display: none;
+}
+
+.tampilkan-table{
+	display: table;
+}
+
 .mg-top-30{
 	margin-top: 30px;
 }
